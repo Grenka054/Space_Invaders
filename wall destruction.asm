@@ -26,7 +26,7 @@ stays ge
 		st r0,r1
 		#
 		pop r0
-	else
+	else #иначе сразу записываем в результирующий массив
 		push r0
 		add r2,r0
 		ld r0,r0
