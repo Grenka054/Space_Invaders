@@ -30,7 +30,7 @@ halt
 
 
 INPUTS>
-str: dc 0b00000000, 0b00000000, 0b00000000, 0b00100000 #test
+str: #dc 0b00000000, 0b00000000, 0b00000000, 0b00100000 #test
      ds 4
 
 OUTPUTS> 
