@@ -16,7 +16,6 @@ stays ge
 		tst r0
 	is nz
 		ldi r0,number
-		inc r1
 		st r0,r1
 		break
 	fi
