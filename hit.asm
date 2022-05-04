@@ -1,5 +1,10 @@
 asect 0x00
 
+ldi r3,0x02
+while
+tst r3
+stays nz
+
 ldi r1, str #исходная строка
 ldi r0,0 # номер монстра
 ldi r2, 3 #счётчик
@@ -59,7 +64,7 @@ fi
 #fi
 ldi r0, enemies
 st r0, r2
-halt
+wend
 
 asect 0xc0
 str: dc 0b00000000, 0b00000000, 0b00000000, 0b00000100 #test
@@ -67,4 +72,3 @@ str: dc 0b00000000, 0b00000000, 0b00000000, 0b00000100 #test
 enemies: 
   dc 0b00101111
 end
-
