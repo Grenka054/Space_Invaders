@@ -1,58 +1,40 @@
 asect  0x00
-
-ldi r0,string #стенки
-ldi r1,flags #флаги
-ldi r2,0 #адрес записи
-ldi r3,3 #счётчик
-
-while 
-	tst r3
-stays ge
-	if 
-		push r1
-		add r2,r1
-		ld r1,r1
-		tst r1 #сдвиг на нужный адрес
-	is nz #если было попадание, то изменяем стенку
-		push r0
-		add r2,r0
-		ld r0,r0
-		move r0,r1
-		shl r1 #делаем в другом регистре маску
-		and r0,r1 #логическое и - результат стенка на 1 меньше	
-		#запись на выход
-		ldi r0,outStr
-		add r2,r0
-		st r0,r1
-		#
-		pop r0
-	else #иначе сразу записываем в результирующий массив
-		push r0
-		add r2,r0
-		ld r0,r0
-		ldi r1,outStr
-		add r2,r1
-		st r1,r0
-		pop r0
-	fi
+ldi r0, 0x3c
+ldi r1, 0xF0
+st r1, r0 #инициализация стенок
+inc r1
+st r1, r0
+inc r1
+st r1, r0
+inc r1
+st r1, r0
+push r0 #мусор в стэк
+main:
+	pop r0
+	ldi r0,string #стенки
+	ldi r1,flags #флаги
+	ldi r3,3 #счётчик
 	
-	pop r1
-	inc r2 #увеличиваем адрес
-	dec r3
-wend
-
-
+	while 
+		tst r3
+	stays ge
+		push r3
+		ld r0, r2
+		ld r1, r3
+		xor r2, r3
+		st r0, r3
+		inc r0
+		inc r1
+		pop r3
+		dec r3
+	wend
+jsr main:
+	
 halt
 
-
-INPUTS>
+asect 0xF0
 string:  #на вход строка - массив из 4 байт
- 	    #dc 0b00111100 , 0b00111000,0b00110000,0b00111100#для отладки
 		ds 4
 flags:  #флаги на попадание в стенки
-	   #dc 0,1,1,0 #для отладки
-	   ds 4
-ENDINPUTS>
-outStr: ds 4 #массив стенок, либо измененных, либо нет
-zeroFlags:ds 4 #возварщаем массив обнуленных флагов попадания
+	   dc 0, 4 , 4 , 0
 end
