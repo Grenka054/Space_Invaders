@@ -1,19 +1,11 @@
 asect 0x00
-#для отладки
-ldi r0,0x75
-ldi r1,3
-st r0,r1
-
-ldi r0,0x76
-ldi r1,5
-st r0,r1
-
-ldi r2,0x01
-while
-tst r2
-stays nz
-	#подгружает случайное число из 0x75, сгенереное аппараткой
-	ldi r2,0x75
+#важный момент, что мы получаем только номер строки, но не то,
+#откуда именно пускать пулю - верхние, нижние, тут по барабану
+push r0
+main:
+	pop r0
+	#подгружает случайное число из rand, сгенереное аппараткой
+	ldi r2, rand
 	ldi r0,8
 	ldi r1,0
 	ld r2,r2
@@ -24,37 +16,20 @@ stays nz
 		add r0,r1
 		dec r2
 		wend
-		#прибавляет к нему число, выдаваемое с шифратора приоритетов, отниммает 2, получаем примерно середину монстра
-	ldi r2, 0x76
+		#прибавляет к нему число сдвига +4, 
+		#получаем примерно середину монстра
+	ldi r0, shift
 	ld r0,r0
 	add r0,r1
-	ldi r0,2
-	sub r1,r0
-	#выгружает это значение в 0x77
-	ldi r2,0x77
-	st r2,r0
-	
-	ldi r2,0x78
 	ldi r0,4
-		while
-		tst r0
-		stays nz
-		ldi r1,0x01
-		ldi r3,7
-			while
-			tst r3
-			stays nz
-			rol r1
-			dec r3
-			st r2,r1
-			wend
-		ldi r1,0
-		st r2,r1
-		dec r0
-		inc r2	
-		wend
-	
-wend
+	add r1,r0
+	#выгружает это значение в res
+	ldi r2, res
+	st r2,r0
+	jsr main
 
-
+asect 0xF0
+rand: dc 0
+shift: dc 1
+res: ds 1
 end
